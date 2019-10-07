@@ -1,0 +1,31 @@
+
+exports.up = function(knex) {
+  return Promise.all([
+    knex.schema.createTable('folders', function(table) {
+      table.increments('id').primary();
+      table.string('name');
+
+      table.timestamps(true, true);
+    }),
+    knex.schema.createTable('palettes', function(table) {
+      table.increments('id').primary();
+      table.string('name');
+      table.string('c1');
+      table.string('c2');
+      table.string('c3');
+      table.string('c4');
+      table.string('c5');
+      table.integer('folder_id').unsigned();
+      table.foreign('folder_id').references('folders.id');
+
+      table.timestamps(true, true);
+    })
+  ])
+};
+
+exports.down = function(knex) {
+  return Promise.all([
+    knex.schema.dropTable('palettes'),
+    knex.schema.dropTable('folders')
+  ])
+};
