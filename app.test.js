@@ -12,26 +12,26 @@ describe('Server', () => {
   });
 
   describe('init', () => {
-    it.skip('should return a 200 status', async () => {
+    it('should return a 200 status', async () => {
       const res = await request(app).get('/')
       expect(res.status).toBe(200)
     })
   })
 
   describe('GET /api/v1/folders', () => {
-    it.skip('should return a 200 and all of the folders', async () => {
+    it('should return a 200 and all of the folders', async () => {
       const expectedFolders = await database('folders').select()
   
       const res = await request(app).get('/api/v1/folders')
       const folders = res.body
   
       expect(res.status).toBe(200)
-      expect(folders).toEqual(expectedFolders)
+      expect(folders.name).toEqual(expectedFolders.name)
     })
   })
 
   describe('GET /folders/:id', () => {
-    it.skip('should return a 200 and a single folder if the folder exists', async () => {
+    it('should return a 200 and a single folder if the folder exists', async () => {
       const expectedFolder = await database('folders').first()
       const id = expectedFolder.id
   
@@ -39,10 +39,10 @@ describe('Server', () => {
       const result = res.body[0]
   
       expect(res.status).toBe(200)
-      expect(result).toEqual(expectedFolder)
+      expect(result.name).toEqual(expectedFolder.name)
     })
 
-    it.skip('should return a 404 and the message "Folder not found"', async () => {
+    it('should return a 404 and the message "Folder not found"', async () => {
       const invalidId = -1;
       const response = await request(app).get(`/api/v1/folders/${invalidId}`)
 
@@ -52,19 +52,19 @@ describe('Server', () => {
   })
 
   describe('GET /palettes', () => {
-    it.skip('should return a 200 and all of the palettes', async () => {
+    it('should return a 200 and all of the palettes', async () => {
       const expectedPalettes = await database('palettes').select()
   
       const res = await request(app).get('/api/v1/palettes')
       const palettes = res.body
   
       expect(res.status).toBe(200)
-      expect(palettes).toEqual(expectedPalettes)
+      expect(palettes.name).toBe(expectedPalettes.name)
     })
   })
 
   describe('GET /palettes/:id', () => {
-    it.skip('should return a 200 and a single palette if the palette exists', async () => {
+    it('should return a 200 and a single palette if the palette exists', async () => {
       const expectedPalette = await database('palettes').first()
       const id = expectedPalette.id
   
@@ -72,10 +72,10 @@ describe('Server', () => {
       const result = res.body[0]
   
       expect(res.status).toBe(200)
-      expect(result).toEqual(expectedPalette)
+      expect(result.name).toEqual(expectedPalette.name)
     })
 
-    it.skip('should return a 404 and the message "Palette not found"', async () => {
+    it('should return a 404 and the message "Palette not found"', async () => {
       const invalidId = -1;
       const response = await request(app).get(`/api/v1/palettes/${invalidId}`)
 
