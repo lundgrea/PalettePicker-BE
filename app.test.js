@@ -130,10 +130,12 @@ describe('Server', () => {
     })
 
     it('should return a 422 and "Request body is missing a parameter"', async () => {
+      const expectedFolder = await database('folders').first()
+      const id = expectedFolder.id
       const newPalette = { name: 'Winter Wonderland'}
   
       const res = await request(app)
-        .post('/api/v1/folders/404/palettes')
+        .post(`/api/v1/folders/${id}/palettes`)
         .send(newPalette)
 
       expect(res.status).toBe(422)
