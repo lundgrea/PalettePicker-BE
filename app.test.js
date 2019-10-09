@@ -12,14 +12,14 @@ describe('Server', () => {
   });
 
   describe('init', () => {
-    it('should return a 200 status', async () => {
+    it.skip('should return a 200 status', async () => {
       const res = await request(app).get('/')
       expect(res.status).toBe(200)
     })
   })
 
   describe('GET /api/v1/folders', () => {
-    it('should return a 200 and all of the folders', async () => {
+    it.skip('should return a 200 and all of the folders', async () => {
       const expectedFolders = await database('folders').select()
   
       const res = await request(app).get('/api/v1/folders')
@@ -31,7 +31,7 @@ describe('Server', () => {
   })
 
   describe('GET /folders/:id', () => {
-    it('should return a 200 and a single folder if the folder exists', async () => {
+    it.skip('should return a 200 and a single folder if the folder exists', async () => {
       const expectedFolder = await database('folders').first()
       const id = expectedFolder.id
   
@@ -42,7 +42,7 @@ describe('Server', () => {
       expect(result).toEqual(expectedFolder)
     })
 
-    it('should return a 404 and the message "Folder not found"', async () => {
+    it.skip('should return a 404 and the message "Folder not found"', async () => {
       const invalidId = -1;
       const response = await request(app).get(`/api/v1/folders/${invalidId}`)
 
@@ -52,7 +52,7 @@ describe('Server', () => {
   })
 
   describe('GET /palettes', () => {
-    it('should return a 200 and all of the palettes', async () => {
+    it.skip('should return a 200 and all of the palettes', async () => {
       const expectedPalettes = await database('palettes').select()
   
       const res = await request(app).get('/api/v1/palettes')
@@ -64,7 +64,7 @@ describe('Server', () => {
   })
 
   describe('GET /palettes/:id', () => {
-    it('should return a 200 and a single palette if the palette exists', async () => {
+    it.skip('should return a 200 and a single palette if the palette exists', async () => {
       const expectedPalette = await database('palettes').first()
       const id = expectedPalette.id
   
@@ -75,12 +75,68 @@ describe('Server', () => {
       expect(result).toEqual(expectedPalette)
     })
 
-    it('should return a 404 and the message "Palette not found"', async () => {
+    it.skip('should return a 404 and the message "Palette not found"', async () => {
       const invalidId = -1;
       const response = await request(app).get(`/api/v1/palettes/${invalidId}`)
 
       expect(response.status).toBe(404)
       expect(response.body.error).toEqual('Palette not found')
+    })
+  })
+
+  describe('POST /api/v1/folders', () => {
+    it('should post a new folder to the db', async () => {
+      
+      const newFolder = { name: 'Winter Wonderland' }
+  
+      const res = await request(app)
+        .post('/api/v1/folders')
+        .send(newFolder)
+  
+      const folders = await database('folders').where('id', res.body.id).select()
+      const folder = folders[0]
+  
+      expect(res.status).toBe(201)
+      expect(folder.name).toEqual(newFolder.name)
+    })
+
+    it('should return a 422 and "Request body is missing a parameter"', async () => {
+      const newFolder = { wazee: 'Winter Wonderland'}
+  
+      const res = await request(app)
+        .post('/api/v1/folders')
+        .send(newFolder)
+
+      expect(res.status).toBe(422)
+      expect(res.body.error).toEqual('Request body is missing a parameter')      
+    })
+  })
+
+  describe('POST /api/v1/palettes', () => {
+    it('should post a new palette to the db', async () => {
+      
+      const newPalette= { name: 'Shady Grove', c1: "#050505", c2: "#004FFF", c3: "#31AFD4", c4: "#902D41", c5: "#FFOO7F"}
+  
+      const res = await request(app)
+        .post('/api/v1/palettes')
+        .send(newPalette)
+  
+      const palettes = await database('palettes').where('id', res.body.id).select()
+      const palette = palettes[0]
+  
+      expect(res.status).toBe(201)
+      expect(palette.name).toEqual(newPalette.name)
+    })
+
+    it('should return a 422 and "Request body is missing a parameter"', async () => {
+      const newPalette = { name: 'Winter Wonderland'}
+  
+      const res = await request(app)
+        .post('/api/v1/palettes')
+        .send(newPalette)
+
+      expect(res.status).toBe(422)
+      expect(res.body.error).toEqual('Request body is missing a parameter')      
     })
   })
 })
