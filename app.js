@@ -42,4 +42,34 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
   }
 })
 
+app.post('/api/v1/folders', async (request, response) => {
+  const newFolderInfo = request.body;
+  const folderParameters = Object.keys(newFolderInfo)
+
+  if (folderParameters.includes('name')) {
+        const folder = await database('folders').insert(newFolderInfo, 'id')
+        return response.status(201).json({id: folder[0]})
+      } else {
+        return response.status(422).json({error: 'Request body is missing a parameter'})
+      }
+})
+
+app.post('/api/v1/palettes', async (request, response) => {
+  const newPaletteInfo = request.body;
+  const paletteParameters = Object.keys(newPaletteInfo)
+
+  if (paletteParameters.includes('name') &&
+      paletteParameters.includes('c1') &&
+      paletteParameters.includes('c2') &&
+      paletteParameters.includes('c3') &&
+      paletteParameters.includes('c4') &&
+      paletteParameters.includes('c5')) {
+        const palette = await database('palettes').insert(newPaletteInfo, 'id')
+        return response.status(201).json({id: palette[0]})
+      } else {
+        return response.status(422).json({error: 'Request body is missing a parameter'})
+      }
+})
+
+
 module.exports = app;
