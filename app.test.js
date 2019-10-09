@@ -167,4 +167,24 @@ describe('Server', () => {
       expect(res.status).toBe(400)
     })
   })
+
+  describe('DELETE /api/v1/palettes/:id', () => {
+    it('should delete a palette from the db', async () => {
+      const expectedPalette = await database('palettes').first()
+      const id = expectedPalette.id
+  
+      const res = await request(app).delete(`/api/v1/palettes/${id}`)
+      expect(res.status).toBe(200)
+
+      const response = await request(app).get(`/api/v1/palettes/${id}`)
+      expect(response.status).toBe(404)
+      expect(response.body.error).toEqual('Palette not found')
+    })
+
+    it('should return a 400 error message if the palette does not exist', async () => {
+      const invalidId = -1;
+      const res = await request(app).delete(`/api/v1/palettes/${invalidId}`)
+      expect(res.status).toBe(404)
+    })
+  })
 })
