@@ -114,11 +114,12 @@ describe('Server', () => {
 
   describe('POST /api/v1/palettes', () => {
     it('should post a new palette to the db', async () => {
-      
-      const newPalette= { name: 'Shady Grove', c1: "#050505", c2: "#004FFF", c3: "#31AFD4", c4: "#902D41", c5: "#FFOO7F"}
+      const expectedFolder = await database('folders').first()
+      const id = expectedFolder.id
+      const newPalette = { name: 'Shady Grove', c1: "#050505", c2: "#004FFF", c3: "#31AFD4", c4: "#902D41", c5: "#FFOO7F", folder_id: id}
   
       const res = await request(app)
-        .post('/api/v1/palettes')
+        .post(`/api/v1/folders/${id}/palettes`)
         .send(newPalette)
   
       const palettes = await database('palettes').where('id', res.body.id).select()
@@ -132,7 +133,7 @@ describe('Server', () => {
       const newPalette = { name: 'Winter Wonderland'}
   
       const res = await request(app)
-        .post('/api/v1/palettes')
+        .post('/api/v1/folders/404/palettes')
         .send(newPalette)
 
       expect(res.status).toBe(422)
