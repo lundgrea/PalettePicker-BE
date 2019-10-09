@@ -72,5 +72,16 @@ app.post('/api/v1/folders/:folder_id/palettes', async (request, response) => {
       }
 })
 
+app.delete('/api/v1/folders/:id', async (request, response) => {
+  const folder = await database('folders').where('id', request.params.id).select();
+  if(folder.length) {
+  const deletePromises = [database('palettes').where('folder_id', request.params.id).del(), database('folders').where('id', request.params.id).del()]
+  const deletedRecords = await Promise.all(deletePromises)
+  return response.status(200).json(`Folder and all associated palettes with Primary Folder ID: ${request.params.id} has been deleted`)
+  } else {
+    return response.status(400).json({error: 'Record does not exist'})
+  }
+})
+
 
 module.exports = app;

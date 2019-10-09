@@ -132,7 +132,7 @@ describe('Server', () => {
     it('should return a 422 and "Request body is missing a parameter"', async () => {
       const expectedFolder = await database('folders').first()
       const id = expectedFolder.id
-      const newPalette = { name: 'Winter Wonderland'}
+      const newPalette = { name: 'Winter Wonderland' }
   
       const res = await request(app)
         .post(`/api/v1/folders/${id}/palettes`)
@@ -140,6 +140,31 @@ describe('Server', () => {
 
       expect(res.status).toBe(422)
       expect(res.body.error).toEqual('Request body is missing a parameter')      
+    })
+  })
+
+  describe('DELETE /api/v1/folders/:id', () => {
+    it('should delete a specific folder and all associated palettes from the db', async () => {
+      const expectedFolder = await database('folders').first()
+      const id = expectedFolder.id
+  
+      const res = await request(app).delete(`/api/v1/folders/${id}`)
+    
+      expect(res.status).toBe(200)
+
+      const response = await request(app).get(`/api/v1/folders/${id}`)
+      expect(response.status).toBe(404)
+      expect(response.body.error).toEqual('Folder not found')
+
+      const paletteCheck = await request(app).get(`/api/v1/folders/${id}/palettes`)
+      expect(paletteCheck.status).toBe(404)
+
+    })
+
+    it('should return a 400 error message if the folder does not exist', async () => {
+      const invalidId = -1;
+      const res = await request(app).delete(`/api/v1/folders/${invalidId}`)
+      expect(res.status).toBe(400)
     })
   })
 })
