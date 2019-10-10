@@ -96,5 +96,17 @@ app.delete('/api/v1/palettes/:id', async (request, response) => {
   }
 })
 
+app.patch('/api/v1/palettes/:id', async (request, response) => {
+  const newPaletteInfo = request.body;
+  const palette = await database('palettes').where('id', request.params.id).select();
+
+  if (palette.length) {
+    const selectedPalette = await database('palettes').where('id', request.params.id).update('name', newPaletteInfo.name)
+    return response.status(200).json()
+  } else {
+    return response.status(404).json({error: 'Palette not found'})
+  }
+})
+
 
 module.exports = app;

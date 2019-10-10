@@ -187,4 +187,43 @@ describe('Server', () => {
       expect(res.status).toBe(404)
     })
   })
+
+  describe('PATCH /api/v1/palettes/:id', () => {
+    it('should update a given palette name', async () => {
+      const expectedPalette = await database('palettes').first()
+      const id = expectedPalette.id
+      const newPalette = {name: 'Edited Palette'}
+
+      const res = await request(app)
+        .patch(`/api/v1/palettes/${id}`)
+        .send(newPalette)
+
+      expect(res.status).toBe(200)
+      expect(newPalette.name).toBe("Edited Palette")    
+    })
+
+    it('should update a given palette color', async () => {
+
+    })
+  })
+  describe('PATCH /api/v1/folders/:id', () => {
+    it('should update a given folder name', async () => {
+
+    })
+  })
+
 })
+
+// const expectedFolder = await database('folders').first()
+// const id = expectedFolder.id
+// const newPalette = { name: 'Shady Grove', c1: "#050505", c2: "#004FFF", c3: "#31AFD4", c4: "#902D41", c5: "#FFOO7F", folder_id: id}
+
+// const res = await request(app)
+//   .post(`/api/v1/folders/${id}/palettes`)
+//   .send(newPalette)
+
+// const palettes = await database('palettes').where('id', res.body.id).select()
+// const palette = palettes[0]
+
+// expect(res.status).toBe(201)
+// expect(palette.name).toEqual(newPalette.name)
