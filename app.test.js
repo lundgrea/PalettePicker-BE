@@ -28,17 +28,6 @@ describe('Server', () => {
       expect(res.status).toBe(200)
       expect(folders.name).toEqual(expectedFolders.name)
     })
-
-    // it('should return objects that match the query params', async () => {
-    //   const expectedFolder = await database('folders').first()
-    //   const theName = expectedFolder.name
-      
-    //   const res = await request(app).get(`/api/v1/folders/${theName}`)
-    //   const folders = res.body[0]
-      
-    //   expect(res.status).toBe(200)
-    //   expect(folders.name).toEqual(name)
-    // })
   })
 
   describe('GET /folders/:id', () => {
@@ -92,6 +81,27 @@ describe('Server', () => {
 
       expect(response.status).toBe(404)
       expect(response.body.error).toEqual('Palette not found')
+    })
+  })
+
+  describe('GET /api/v1/folder/:id/palettes', () => {
+    it('should give us all palettes for a given folder', async () => {
+      const expectedFolder = await database('folders').first()
+      const id = expectedFolder.id
+
+      const expectedPalettes = await database('palettes').where('folder_id', id).select()
+
+      const res = await request(app).get(`/api/v1/folders/${id}/palettes`)
+      const results = res.body
+  
+      expect(res.status).toBe(200)
+      expect(results[0].id).toEqual(expectedPalettes[0].id)
+    })
+
+    it('should give us an error if the folder does not exist', async () => {
+      const invalidId = -1;
+      const res = await request(app).get(`/api/v1/folders/${invalidId}/palettes`)
+      expect(res.status).toBe(404)
     })
   })
 
