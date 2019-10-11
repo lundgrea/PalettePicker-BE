@@ -97,14 +97,36 @@ app.delete('/api/v1/palettes/:id', async (request, response) => {
 })
 
 app.patch('/api/v1/palettes/:id', async (request, response) => {
+  let attribute;
   const newPaletteInfo = request.body;
+  const attributes = Object.keys(newPaletteInfo)
   const palette = await database('palettes').where('id', request.params.id).select();
-
+  if(!attributes.length) {
+    return response.status(404).json({error: 'Please add relevant palette info'})
+  }  else {
+    attribute = attributes[0]
+  }
   if (palette.length) {
-    const selectedPalette = await database('palettes').where('id', request.params.id).update('name', newPaletteInfo.name)
-    return response.status(200).json()
+    const selectedPalette = await database('palettes').where('id', request.params.id).update(attribute, newPaletteInfo[attribute])
+    const palettes = await database('palettes').select();
+    return response.status(200).json(palettes);
+
   } else {
     return response.status(404).json({error: 'Palette not found'})
+  }
+})
+
+app.patch('/api/v1/folders/:id', async (request, response) => {
+  const newFolderInfo = request.body;
+  const folder = await database('folders').where('id', request.params.id).select();
+
+  if (folder.length) {
+    const selectedFolder = await database('folders').where('id', request.params.id).update('name', newFolderInfo.name)
+    const folders = await database('folders').select();
+    return response.status(200).json(folders);
+
+  } else {
+    return response.status(404).json({error: 'Folder not found'})
   }
 })
 

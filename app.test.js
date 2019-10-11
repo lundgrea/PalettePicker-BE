@@ -192,6 +192,7 @@ describe('Server', () => {
     it('should update a given palette name', async () => {
       const expectedPalette = await database('palettes').first()
       const id = expectedPalette.id
+
       const newPalette = {name: 'Edited Palette'}
 
       const res = await request(app)
@@ -203,12 +204,49 @@ describe('Server', () => {
     })
 
     it('should update a given palette color', async () => {
+      const expectedPalette = await database('palettes').first()
+      const id = expectedPalette.id
 
+      const newPalette = {c2: '#555779'}
+
+      const res = await request(app)
+        .patch(`/api/v1/palettes/${id}`)
+        .send(newPalette)
+
+      const palettes = await database('palettes').where('id', id).select()
+      const palette = palettes[0]
+
+      expect(res.status).toBe(200)
+      expect(palette.c2).toBe('#555779')   
+    })
+
+    it('should return a 400 error message if the palette does not exist', async () => {
+      const invalidId = -1;
+      const res = await request(app).patch(`/api/v1/palettes/${invalidId}`)
+      expect(res.status).toBe(404)
     })
   })
   describe('PATCH /api/v1/folders/:id', () => {
     it('should update a given folder name', async () => {
+      const expectedFolder = await database('folders').first()
+      const id = expectedFolder.id
+      const newFolder = { name: 'Edited Folder'}
 
+      const res = await request(app)
+        .patch(`/api/v1/folders/${id}`)
+        .send(newFolder)
+  
+      const folders = await database('folders').where('id', id).select()
+      const folder = folders[0]
+
+      expect(res.status).toBe(200)
+      expect(folder.name).toBe("Edited Folder")   
+    })
+
+    it('should return a 400 error message if the folder does not exist', async () => {
+      const invalidId = -1;
+      const res = await request(app).patch(`/api/v1/folders/${invalidId}`)
+      expect(res.status).toBe(404)
     })
   })
 
