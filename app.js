@@ -23,19 +23,6 @@ app.get('/api/v1/folders', async (request, response) => {
 })
 
 
-// app.get('/api/v1/folders/:params', async (request, response) => {
-//   const { requested } = request.query
-//   const folder = await database('folders').where('name', `${requested}`).select()
-
-//   const folders = await database('folders').select();
-
-//   if (requested) {
-//     return response.status(200).json({ folders : folder })
-//   } else {
-//     return response.status(200).json({ folders })
-//   }
-// })
-
 app.get('/api/v1/folders/:id', async (request, response) => {
   const folder = await database('folders').where('id', request.params.id).select();
   if(folder.length) {
@@ -60,7 +47,15 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
   }
 })
 
-app.get('/api/v1/')
+app.get('/api/v1/folders/:id/palettes', async (request, response) => {
+  const folder = await database('folders').where('id', request.params.id).select();
+  if(folder.length) {
+    const palettes = await database('palettes').where('folder_id', request.params.id).select()
+    return response.status(200).json(palettes)
+  } else {
+    return response.status(404).json({error: 'Folder not found'})
+  }
+})
 
 app.post('/api/v1/folders', async (request, response) => {
   const newFolderInfo = request.body;
@@ -139,8 +134,8 @@ app.patch('/api/v1/folders/:id', async (request, response) => {
 
   if (folder.length) {
     const selectedFolder = await database('folders').where('id', request.params.id).update('name', newFolderInfo.name)
-    const folders = await database('folders').select();
-    return response.status(200).json(folders);
+    const folder = await database('folders').where('id', request.params.id).select()
+    return response.status(200).json(folder);
 
   } else {
     return response.status(404).json({error: 'Folder not found'})
