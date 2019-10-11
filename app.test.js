@@ -28,6 +28,17 @@ describe('Server', () => {
       expect(res.status).toBe(200)
       expect(folders.name).toEqual(expectedFolders.name)
     })
+
+    // it('should return objects that match the query params', async () => {
+    //   const expectedFolder = await database('folders').first()
+    //   const theName = expectedFolder.name
+      
+    //   const res = await request(app).get(`/api/v1/folders/${theName}`)
+    //   const folders = res.body[0]
+      
+    //   expect(res.status).toBe(200)
+    //   expect(folders.name).toEqual(name)
+    // })
   })
 
   describe('GET /folders/:id', () => {
@@ -251,17 +262,3 @@ describe('Server', () => {
   })
 
 })
-
-// const expectedFolder = await database('folders').first()
-// const id = expectedFolder.id
-// const newPalette = { name: 'Shady Grove', c1: "#050505", c2: "#004FFF", c3: "#31AFD4", c4: "#902D41", c5: "#FFOO7F", folder_id: id}
-
-// const res = await request(app)
-//   .post(`/api/v1/folders/${id}/palettes`)
-//   .send(newPalette)
-
-// const palettes = await database('palettes').where('id', res.body.id).select()
-// const palette = palettes[0]
-
-// expect(res.status).toBe(201)
-// expect(palette.name).toEqual(newPalette.name)

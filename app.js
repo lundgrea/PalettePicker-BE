@@ -16,10 +16,25 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/v1/folders', async (request, response) => {
+
   const folders = await database('folders').select();
 
-  return response.status(200).json(folders);
+  return response.status(200).json({ folders })
 })
+
+
+// app.get('/api/v1/folders/:params', async (request, response) => {
+//   const { requested } = request.query
+//   const folder = await database('folders').where('name', `${requested}`).select()
+
+//   const folders = await database('folders').select();
+
+//   if (requested) {
+//     return response.status(200).json({ folders : folder })
+//   } else {
+//     return response.status(200).json({ folders })
+//   }
+// })
 
 app.get('/api/v1/folders/:id', async (request, response) => {
   const folder = await database('folders').where('id', request.params.id).select();
@@ -44,6 +59,8 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
     return response.status(404).json({error: 'Palette not found'})
   }
 })
+
+app.get('/api/v1/')
 
 app.post('/api/v1/folders', async (request, response) => {
   const newFolderInfo = request.body;
