@@ -22,7 +22,7 @@ The front end of the applicaiton can be access at the [[Happy Little Palette Pic
 ---
 
 ## Database and Schema
-![screenshot]()
+![screenshot](https://user-images.githubusercontent.com/38546045/66725871-25fc4080-ee25-11e9-9214-1128086b1216.png)
 The database is a PostgreSQL database, made up of two tables.
 <br>
 
