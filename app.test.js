@@ -28,6 +28,17 @@ describe('Server', () => {
       expect(res.status).toBe(200)
       expect(folders.name).toEqual(expectedFolders.name)
     })
+
+    it('should return a 200 and the named folder', async () => {
+      const expectedFolder = await database('folders').first()
+      const expectedName = expectedFolder.name
+
+      const res = await request(app).get(`/api/v1/folders?name=${expectedName}`)
+      const result = res.body
+
+      expect(res.status).toBe(200)
+      expect(result.name).toEqual(expectedName)
+    })
   })
 
   describe('GET /folders/:id', () => {

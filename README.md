@@ -362,6 +362,27 @@ The color palettes will be returned in as JSON to look like:
 
 <br>
 
+To request a specific folder by name:
+
+```
+GET /api/v1/folders?name=Smoke
+```
+
+The folder will be returned in as JSON to look like:
+
+```
+
+[
+    {
+        "id": 24,
+        "name": "Smoke",
+        "created_at": "2019-10-11T19:15:40.751Z",
+        "updated_at": "2019-10-11T19:15:40.751Z"
+    }
+]
+```
+
+<br>
 
 ##### POST REQUESTS
 <br>
