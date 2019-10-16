@@ -16,12 +16,15 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/v1/folders', async (request, response) => {
-
+  const specificName = request.query.name
   const folders = await database('folders').select();
-
+  if (specificName) {
+    const foundFolder = folders.find(folder => folder.name == specificName)
+    return response.status(200).json(foundFolder)
+  } else { 
   return response.status(200).json({ folders })
+  }
 })
-
 
 app.get('/api/v1/folders/:id', async (request, response) => {
   const folder = await database('folders').where('id', request.params.id).select();
