@@ -144,7 +144,7 @@ describe('Server', () => {
     })
   })
 
-  describe('POST /api/v1/palettes', () => {
+  describe('POST /api/v1/folder/:id/palettes', () => {
     it('should post a new palette to the db', async () => {
       const expectedFolder = await database('folders').first()
       const id = expectedFolder.id
