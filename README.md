@@ -8,7 +8,7 @@ API Base URL:<br>
 Overview: 
 This project is half of a full stack application built in a two person team over the course of 10 days. The one-to-many PostgresSQL database schema was migrated and seeded using Knex, alongside an Express server with fetch calls to the Node.js API endpoints.
 
-The front end of the applicaiton can be access at the [[Happy Little Palette Picker Front End](https://palette-picker-fe-ac.herokuapp.com/)
+The front end of the applicaiton can be access at the [[Happy Little Palette Picker Front End](https://happy-little-palette-picker.herokuapp.com/)
 
 ---
 
