@@ -22,7 +22,7 @@
     "regenerator-runtime": "^0.13.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.3",
+    "@babel/core": "^7.29.6",
     "@babel/node": "^7.6.3",
     "@babel/preset-env": "^7.6.3",
     "babel-jest": "^29.7.0",
